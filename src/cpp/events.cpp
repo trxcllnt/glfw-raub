@@ -71,6 +71,10 @@ void fillMouse(Napi::Object evt, GLFWwindow *window, int mods = -1) {
 	
 	evt.Set("clientX", static_cast<double>(state->mouseX));
 	evt.Set("clientY", static_cast<double>(state->mouseY));
+	evt.Set("offsetX", static_cast<double>(state->mouseX));
+	evt.Set("offsetY", static_cast<double>(state->mouseY));
+	evt.Set("screenX", static_cast<double>(state->mouseX));
+	evt.Set("screenY", static_cast<double>(state->mouseY));
 	evt.Set("pageX", static_cast<double>(state->mouseX));
 	evt.Set("pageY", static_cast<double>(state->mouseY));
 	evt.Set("x", static_cast<double>(state->mouseX));
