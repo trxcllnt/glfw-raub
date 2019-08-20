@@ -19,7 +19,11 @@ class Window extends EventEmitter {
 		
 		this._width = opts.width || 800;
 		this._height = opts.height || 600;
-		
+		this._scrollTop = 0;
+		this._scrollLeft = 0;
+		this._clientTop = 0;
+		this._clientLeft = 0;
+
 		this._display = opts.display;
 		this._monitors = glfw.getMonitors();
 		this._primaryDisplay = this._monitors.filter(d => d.is_primary)[0];
@@ -38,8 +42,8 @@ class Window extends EventEmitter {
 		
 		// we use OpenGL 2.1, GLSL 1.20. Comment this for now as this is for GLSL 1.50
 		//glfw.windowHint(glfw.OPENGL_FORWARD_COMPAT, 1);
-		//glfw.windowHint(glfw.OPENGL_VERSION_MAJOR, 3);
-		//glfw.windowHint(glfw.OPENGL_VERSION_MINOR, 2);
+		//glfw.windowHint(glfw.CONTEXT_VERSION_MAJOR, 3);
+		//glfw.windowHint(glfw.CONTEXT_VERSION_MINOR, 2);
 		//glfw.windowHint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE);
 		glfw.windowHint(glfw.RESIZABLE, 1);
 		glfw.windowHint(glfw.VISIBLE, 1);
@@ -248,6 +252,18 @@ class Window extends EventEmitter {
 	get wh() { return [this.width, this.height]; }
 	set wh([width, height]) { this.size = { width, height }; }
 	
+	get offsetWidth() { return this._width; }
+	set offsetWidth(v) { this.width = v; }
+	get offsetHeight() { return this._height; }
+	set offsetHeight(v) { this.height = v; }
+	get scrollTop() { return this._scrollTop; }
+	set scrollTop(v) { this._scrollTop = v; }
+	get scrollLeft() { return this._scrollLeft; }
+	set scrollLeft(v) { this._scrollLeft = v; }
+	get clientTop() { return this._clientTop; }
+	set clientTop(v) { this._clientTop = v; }
+	get clientLeft() { return this._clientLeft; }
+	set clientLeft(v) { this._clientLeft = v; }
 	
 	get size() {
 		const size = glfw.getWindowSize(this._window);
@@ -335,6 +351,12 @@ class Window extends EventEmitter {
 	get cursorPos() { return glfw.getCursorPos(this._window); }
 	set cursorPos({ x, y }) { glfw.setCursorPos(this._window, x, y); }
 	
+	getBoundingClientRect() {
+		return {
+			x: 0,    y: 0,   width: this._width, height: this._height,
+			left: 0, top: 0, right: this._width, bottom: this._height,
+		};
+	}
 	
 	getKey(key) { return glfw.getKey(this._window, key); }
 	
@@ -360,6 +382,9 @@ class Window extends EventEmitter {
 	
 	
 	emit(type, event) {
+
+		this.event = event;
+		event.target = this;
 		
 		if (type === 'keydown' || type === 'keyup') {
 			event.which = Window.extraCodes[event.which] || event.which;
@@ -381,6 +406,7 @@ class Window extends EventEmitter {
 		
 		super.emit(type, event);
 		
+		this.event = null;
 	}
 	
 	

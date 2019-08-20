@@ -178,7 +178,12 @@ class Document extends Window {
 				dispatchEvent       : () => {},
 				addEventListener    : () => {},
 				removeEventListener : () => {},
-				
+				getBoundingClientRect() {
+					return {
+						   x: 0,   y: 0, width: this.width, height: this.height,
+						left: 0, top: 0, right: this.width, bottom: this.height,
+					};
+				}
 			};
 			
 		} else if (name.indexOf('img') >= 0) {
