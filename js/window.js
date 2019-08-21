@@ -535,14 +535,22 @@ class Window extends EventEmitter {
 	requestAnimationFrame(cb = () => {}) {
 		if (this._animationframe === null) {
 			this._animationframe = setImmediate(() => {
+				// pollEvents() before setting this._animationframe to null
+				// ensures event handlers that trigger requestAnimationFrame()
+				// are processed this frame instead of next
+				glfw.pollEvents();
 				this._animationframe = null;
+				const gl = this.constructor.webgl;
+				// hack: reset our private `gl._clearMask` field so we know whether
+				// to call swapBuffers() after all the listeners have been executed
+				gl && (gl._clearMask = 0);
 				const listeners = this.listeners('animationframe');
 				if (listeners.length > 0) {
 					this.removeAllListeners('animationframe');
 					listeners.forEach((cb) => cb(Date.now()));
-					this.swapBuffers();
 				}
-				glfw.pollEvents();
+				// Fix for MacOS: only swap buffers if gl.clear() was called
+				gl && gl._clearMask && this.swapBuffers();
 			});
 		}
 		this.once('animationframe', cb);
