@@ -103,6 +103,7 @@ class Window extends EventEmitter {
 			this._height = height * this._ratio;
 		});
 		
+		this._animationframe = null;
 		this.requestAnimationFrame = this.requestAnimationFrame.bind(this);
 		this.cancelAnimationFrame = this.cancelAnimationFrame.bind(this);
 	}
@@ -412,6 +413,7 @@ class Window extends EventEmitter {
 	emit(type, event) {
 
 		this.event = event;
+		event.type = type;
 		event.target = this;
 		
 		if (type === 'keydown' || type === 'keyup') {
@@ -530,16 +532,35 @@ class Window extends EventEmitter {
 		
 	}
 	
-	requestAnimationFrame(cb) {
-		return setImmediate(() => {
-			cb(Date.now());
-			this.swapBuffers();
-			glfw.pollEvents();
-		});
+	requestAnimationFrame(cb = () => {}) {
+		if (this._animationframe === null) {
+			this._animationframe = setImmediate(() => {
+				this._animationframe = null;
+				const listeners = this.listeners('animationframe');
+				if (listeners.length > 0) {
+					this.removeAllListeners('animationframe');
+					listeners.forEach((cb) => cb(Date.now()));
+					this.swapBuffers();
+				}
+				glfw.pollEvents();
+			});
+		}
+		this.once('animationframe', cb);
+		return cb;
 	}
 
-	cancelAnimationFrame(id) {
-		clearImmediate(id);
+	cancelAnimationFrame(cb) {
+		if (typeof cb !== 'function') {
+			return;
+		}
+		this.removeListener('animationframe', cb);
+		if (this._animationframe === null) {
+			return;
+		}
+		if (this.listenerCount('animationframe') === 0) {
+			clearImmediate(this._animationframe);
+			this._animationframe = null;
+		}
 	}
 }
 

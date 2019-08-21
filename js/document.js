@@ -70,9 +70,9 @@ class Document extends Window {
 		const sizeFB  = this.framebufferSize;
 		
 		this._ratio = sizeFB.width / sizeWin.width;
-		
 		this._width = this._width * this._ratio;
 		this._height = this._height * this._ratio;
+		setInterval(() => glfw.pollEvents(), 0).unref();
 	}
 		
 	get onkeydown() { return this.listeners('keydown'); }
