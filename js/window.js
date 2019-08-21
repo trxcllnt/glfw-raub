@@ -12,6 +12,7 @@ class Window extends EventEmitter {
 		
 		super();
 		
+		this._ratio = 1;
 		this._title = null;
 		this._icon = null;
 		this._modeCache = {};
@@ -90,9 +91,16 @@ class Window extends EventEmitter {
 			this._y = y;
 		});
 		
+		this.on('fbresize', ({ width, height }) => {
+			this._width = width / this._ratio;
+			this._height = height / this._ratio;
+			this._ratio = width / this._width;
+		});
+		
 		this.on('resize', ({ width, height }) => {
-			this._width = width;
-			this._height = height;
+			this._ratio = this.framebufferSize.width / width;
+			this._width = width * this._ratio;
+			this._height = height * this._ratio;
 		});
 		
 		this.requestAnimationFrame = this.requestAnimationFrame.bind(this);
@@ -256,6 +264,21 @@ class Window extends EventEmitter {
 	set h(v) { this.height = v; }
 	get wh() { return [this.width, this.height]; }
 	set wh([width, height]) { this.size = { width, height }; }
+	
+	get body() { return this; }
+	
+	get ratio() { return this._ratio; }
+	get devicePixelRatio() { return this._ratio; }
+	
+	get innerWidth() { return this.width; }
+	set innerWidth(v) { this.width = v; }
+	get innerHeight() { return this.height; }
+	set innerHeight(v) { this.height = v; }
+	
+	get clientWidth() { return this.width / this._ratio; }
+	set clientWidth(v) { this.width = v * this._ratio; }
+	get clientHeight() { return this.height / this._ratio; }
+	set clientHeight(v) { this.height = v * this._ratio; }
 	
 	get offsetWidth() { return this._width; }
 	set offsetWidth(v) { this.width = v; }

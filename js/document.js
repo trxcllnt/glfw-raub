@@ -71,24 +71,10 @@ class Document extends Window {
 		
 		this._ratio = sizeFB.width / sizeWin.width;
 		
+		this._width = this._width * this._ratio;
+		this._height = this._height * this._ratio;
 	}
-	
-	
-	get body() { return this; }
-	
-	get ratio() { return this._ratio; }
-	get devicePixelRatio() { return this._ratio; }
-	
-	get innerWidth() { return this.width; }
-	set innerWidth(v) { this.width = v; }
-	get innerHeight() { return this.height; }
-	set innerHeight(v) { this.height = v; }
-	
-	get clientWidth() { return this.width / this._ratio; }
-	set clientWidth(v) { this.width = v * this._ratio; }
-	get clientHeight() { return this.height / this._ratio; }
-	set clientHeight(v) { this.height = v * this._ratio; }
-	
+		
 	get onkeydown() { return this.listeners('keydown'); }
 	set onkeydown(cb) { this.on('keydown', cb); }
 	
