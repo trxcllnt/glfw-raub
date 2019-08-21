@@ -84,10 +84,10 @@ class Document extends Window {
 	get innerHeight() { return this.height; }
 	set innerHeight(v) { this.height = v; }
 	
-	get clientWidth() { return this.width; }
-	set clientWidth(v) { this.width = v; }
-	get clientHeight() { return this.height; }
-	set clientHeight(v) { this.height = v; }
+	get clientWidth() { return this.width / this._ratio; }
+	set clientWidth(v) { this.width = v * this._ratio; }
+	get clientHeight() { return this.height / this._ratio; }
+	set clientHeight(v) { this.height = v * this._ratio; }
 	
 	get onkeydown() { return this.listeners('keydown'); }
 	set onkeydown(cb) { this.on('keydown', cb); }
