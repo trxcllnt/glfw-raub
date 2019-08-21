@@ -58,6 +58,9 @@ class Window extends EventEmitter {
 		glfw.windowHint(glfw.DECORATED, this._decorated ? glfw.TRUE : glfw.FALSE);
 		glfw.windowHint(glfw.SAMPLES, this._msaa);
 		
+		if (typeof opts.glfwInit === 'function') {
+			opts.glfwInit(glfw);
+		}
 		
 		this._emitter = { emit: (t, e) => this.emit(t, e) };
 		
