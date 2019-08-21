@@ -92,6 +92,8 @@ class Window extends EventEmitter {
 			this._height = height;
 		});
 		
+		this.requestAnimationFrame = this.requestAnimationFrame.bind(this);
+		this.cancelAnimationFrame = this.cancelAnimationFrame.bind(this);
 	}
 	
 	
@@ -502,6 +504,17 @@ class Window extends EventEmitter {
 		
 	}
 	
+	requestAnimationFrame(cb) {
+		return setImmediate(() => {
+			cb(Date.now());
+			this.swapBuffers();
+			glfw.pollEvents();
+		});
+	}
+
+	cancelAnimationFrame(id) {
+		clearImmediate(id);
+	}
 }
 
 

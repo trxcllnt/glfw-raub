@@ -71,8 +71,6 @@ class Document extends Window {
 		
 		this._ratio = sizeFB.width / sizeWin.width;
 		
-		this.requestAnimationFrame = this._requestAnimationFrame.bind(this);
-		
 	}
 	
 	
@@ -202,13 +200,6 @@ class Document extends Window {
 	addEventListener(name, callback) { this.on(name, callback); }
 	
 	removeEventListener(name, callback) { this.removeListener(name, callback); }
-	
-	
-	_requestAnimationFrame(cb) {
-		this.swapBuffers();
-		glfw.pollEvents();
-		setImmediate(() => cb(Date.now()));
-	}
 	
 }
 
