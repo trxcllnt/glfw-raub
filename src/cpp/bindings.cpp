@@ -15,100 +15,117 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	
 	std::atexit(glfw::deinit);
 	
-	/* GLFW initialization, termination and version querying */
+	
+	// ------------ Methods ------------
+	
 	JS_GLFW_SET_METHOD(init);
+	JS_GLFW_SET_METHOD(initHint);
 	JS_GLFW_SET_METHOD(terminate);
 	JS_GLFW_SET_METHOD(getVersion);
 	JS_GLFW_SET_METHOD(getVersionString);
-	
-	/* Time */
+	JS_GLFW_SET_METHOD(getError);
 	JS_GLFW_SET_METHOD(getTime);
 	JS_GLFW_SET_METHOD(setTime);
-	
-	/* Monitor handling */
 	JS_GLFW_SET_METHOD(getMonitors);
-	
-	/* Window handling */
-	JS_GLFW_SET_METHOD(createWindow);
+	JS_GLFW_SET_METHOD(getPrimaryMonitor);
 	JS_GLFW_SET_METHOD(windowHint);
+	JS_GLFW_SET_METHOD(windowHintString);
 	JS_GLFW_SET_METHOD(defaultWindowHints);
-	JS_GLFW_SET_METHOD(platformWindow);
-	JS_GLFW_SET_METHOD(platformContext);
+	JS_GLFW_SET_METHOD(joystickPresent);
+	JS_GLFW_SET_METHOD(getJoystickAxes);
+	JS_GLFW_SET_METHOD(getJoystickButtons);
+	JS_GLFW_SET_METHOD(getJoystickName);
+	JS_GLFW_SET_METHOD(createWindow);
 	JS_GLFW_SET_METHOD(destroyWindow);
-	JS_GLFW_SET_METHOD(setWindowShouldClose);
-	JS_GLFW_SET_METHOD(windowShouldClose);
 	JS_GLFW_SET_METHOD(setWindowTitle);
 	JS_GLFW_SET_METHOD(setWindowIcon);
 	JS_GLFW_SET_METHOD(getWindowSize);
+	JS_GLFW_SET_METHOD(getWindowFrameSize);
+	JS_GLFW_SET_METHOD(getWindowContentScale);
 	JS_GLFW_SET_METHOD(setWindowSize);
+	JS_GLFW_SET_METHOD(setWindowSizeLimits);
+	JS_GLFW_SET_METHOD(setWindowAspectRatio);
 	JS_GLFW_SET_METHOD(setWindowPos);
 	JS_GLFW_SET_METHOD(getWindowPos);
+	JS_GLFW_SET_METHOD(getWindowOpacity);
+	JS_GLFW_SET_METHOD(setWindowOpacity);
+	JS_GLFW_SET_METHOD(maximizeWindow);
+	JS_GLFW_SET_METHOD(focusWindow);
+	JS_GLFW_SET_METHOD(requestWindowAttention);
+	JS_GLFW_SET_METHOD(getWindowMonitor);
 	JS_GLFW_SET_METHOD(getFramebufferSize);
 	JS_GLFW_SET_METHOD(iconifyWindow);
 	JS_GLFW_SET_METHOD(restoreWindow);
-	JS_GLFW_SET_METHOD(showWindow);
 	JS_GLFW_SET_METHOD(hideWindow);
+	JS_GLFW_SET_METHOD(showWindow);
+	JS_GLFW_SET_METHOD(windowShouldClose);
+	JS_GLFW_SET_METHOD(setWindowShouldClose);
 	JS_GLFW_SET_METHOD(getWindowAttrib);
+	JS_GLFW_SET_METHOD(setWindowAttrib);
 	JS_GLFW_SET_METHOD(setInputMode);
+	JS_GLFW_SET_METHOD(getInputMode);
 	JS_GLFW_SET_METHOD(pollEvents);
 	JS_GLFW_SET_METHOD(waitEvents);
-	
-	/* Input handling */
+	JS_GLFW_SET_METHOD(waitEventsTimeout);
+	JS_GLFW_SET_METHOD(postEmptyEvent);
 	JS_GLFW_SET_METHOD(getKey);
 	JS_GLFW_SET_METHOD(getMouseButton);
 	JS_GLFW_SET_METHOD(getCursorPos);
 	JS_GLFW_SET_METHOD(setCursorPos);
-	
-	/* Context handling */
 	JS_GLFW_SET_METHOD(makeContextCurrent);
 	JS_GLFW_SET_METHOD(getCurrentContext);
 	JS_GLFW_SET_METHOD(swapBuffers);
 	JS_GLFW_SET_METHOD(swapInterval);
 	JS_GLFW_SET_METHOD(extensionSupported);
+	JS_GLFW_SET_METHOD(rawMouseMotionSupported);
+	JS_GLFW_SET_METHOD(getKeyName);
+	JS_GLFW_SET_METHOD(getKeyScancode);
+	// TODO
+	// JS_GLFW_SET_METHOD(createCursor);
+	// JS_GLFW_SET_METHOD(createStandardCursor);
+	// JS_GLFW_SET_METHOD(destroyCursor);
+	// JS_GLFW_SET_METHOD(setCursor);
+	JS_GLFW_SET_METHOD(getJoystickHats);
+	JS_GLFW_SET_METHOD(joystickIsGamepad);
+	JS_GLFW_SET_METHOD(updateGamepadMappings);
+	JS_GLFW_SET_METHOD(getGamepadName);
+	JS_GLFW_SET_METHOD(getGamepadState);
+	JS_GLFW_SET_METHOD(setClipboardString);
+	JS_GLFW_SET_METHOD(getClipboardString);
+	JS_GLFW_SET_METHOD(getTimerValue);
+	JS_GLFW_SET_METHOD(getTimerFrequency);
 	
-	/* Joystick */
-	JS_GLFW_SET_METHOD(joystickPresent);
-	JS_GLFW_SET_METHOD(getJoystickAxes);
-	JS_GLFW_SET_METHOD(getJoystickButtons);
-	JS_GLFW_SET_METHOD(getJoystickName);
+	JS_GLFW_SET_METHOD(platformWindow);
+	JS_GLFW_SET_METHOD(platformContext);
 	
-	/*************************************************************************
-	* GLFW version
-	*************************************************************************/
+	JS_GLFW_SET_METHOD(testScene);
+	JS_GLFW_SET_METHOD(testJoystick);
+	
+	
+	// ------------ Constants ------------
 	
 	JS_GLFW_CONSTANT(VERSION_MAJOR);
 	JS_GLFW_CONSTANT(VERSION_MINOR);
 	JS_GLFW_CONSTANT(VERSION_REVISION);
 	
-	/*************************************************************************
-	* Input handling definitions
-	*************************************************************************/
+	JS_GLFW_CONSTANT(TRUE);
+	JS_GLFW_CONSTANT(FALSE);
 	
-	/* Key and button state/action definitions */
 	JS_GLFW_CONSTANT(RELEASE);
 	JS_GLFW_CONSTANT(PRESS);
 	JS_GLFW_CONSTANT(REPEAT);
 	
-	/* These key codes are inspired by the *USB HID Usage Tables v1.12* (p. 53-60),
-	* but re-arranged to map to 7-bit ASCII for printable keys (function keys are
-	* put in the 256+ range).
-	*
-	* The naming of the key codes follow these rules:
-	*  - The US keyboard layout is used
-	*  - Names of printable alpha-numeric characters are used (e.g. "A", "R",
-	*    "3", etc.)
-	*  - For non-alphanumeric characters, Unicode:ish names are used (e.g.
-	*    "COMMA", "LEFT_SQUARE_BRACKET", etc.). Note that some names do not
-	*    correspond to the Unicode standard (usually for brevity)
-	*  - Keys that lack a clear US mapping are named "WORLD_x"
-	*  - For non-printable keys, custom names are used (e.g. "F4",
-	*    "BACKSPACE", etc.)
-	*/
+	JS_GLFW_CONSTANT(HAT_CENTERED);
+	JS_GLFW_CONSTANT(HAT_UP);
+	JS_GLFW_CONSTANT(HAT_RIGHT);
+	JS_GLFW_CONSTANT(HAT_DOWN);
+	JS_GLFW_CONSTANT(HAT_LEFT);
+	JS_GLFW_CONSTANT(HAT_RIGHT_UP);
+	JS_GLFW_CONSTANT(HAT_RIGHT_DOWN);
+	JS_GLFW_CONSTANT(HAT_LEFT_UP);
+	JS_GLFW_CONSTANT(HAT_LEFT_DOWN);
 	
-	/* The unknown key */
 	JS_GLFW_CONSTANT(KEY_UNKNOWN);
-	
-	/* Printable keys */
 	JS_GLFW_CONSTANT(KEY_SPACE);
 	JS_GLFW_CONSTANT(KEY_APOSTROPHE);
 	JS_GLFW_CONSTANT(KEY_COMMA);
@@ -159,8 +176,6 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GLFW_CONSTANT(KEY_GRAVE_ACCENT);
 	JS_GLFW_CONSTANT(KEY_WORLD_1);
 	JS_GLFW_CONSTANT(KEY_WORLD_2);
-	
-	/* Function keys */
 	JS_GLFW_CONSTANT(KEY_ESCAPE);
 	JS_GLFW_CONSTANT(KEY_ENTER);
 	JS_GLFW_CONSTANT(KEY_TAB);
@@ -233,18 +248,13 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GLFW_CONSTANT(KEY_MENU);
 	JS_GLFW_CONSTANT(KEY_LAST);
 	
-	/*Modifier key flags*/
-	
-	/*If this bit is set one or more Shift keys were held down. */
 	JS_GLFW_CONSTANT(MOD_SHIFT);
-	/*If this bit is set one or more Control keys were held down. */
 	JS_GLFW_CONSTANT(MOD_CONTROL);
-	/*If this bit is set one or more Alt keys were held down. */
 	JS_GLFW_CONSTANT(MOD_ALT);
-	/*If this bit is set one or more Super keys were held down. */
 	JS_GLFW_CONSTANT(MOD_SUPER);
+	JS_GLFW_CONSTANT(MOD_CAPS_LOCK);
+	JS_GLFW_CONSTANT(MOD_NUM_LOCK);
 	
-	/*Mouse buttons*/
 	JS_GLFW_CONSTANT(MOUSE_BUTTON_1);
 	JS_GLFW_CONSTANT(MOUSE_BUTTON_2);
 	JS_GLFW_CONSTANT(MOUSE_BUTTON_3);
@@ -258,7 +268,6 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GLFW_CONSTANT(MOUSE_BUTTON_RIGHT);
 	JS_GLFW_CONSTANT(MOUSE_BUTTON_MIDDLE);
 	
-	/*Joysticks*/
 	JS_GLFW_CONSTANT(JOYSTICK_1);
 	JS_GLFW_CONSTANT(JOYSTICK_2);
 	JS_GLFW_CONSTANT(JOYSTICK_3);
@@ -277,34 +286,59 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GLFW_CONSTANT(JOYSTICK_16);
 	JS_GLFW_CONSTANT(JOYSTICK_LAST);
 	
-	/*errors Error codes*/
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_A);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_B);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_X);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_Y);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_LEFT_BUMPER);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_RIGHT_BUMPER);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_BACK);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_START);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_GUIDE);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_LEFT_THUMB);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_RIGHT_THUMB);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_DPAD_UP);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_DPAD_RIGHT);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_DPAD_DOWN);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_DPAD_LEFT);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_LAST);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_CROSS);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_CIRCLE);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_SQUARE);
+	JS_GLFW_CONSTANT(GAMEPAD_BUTTON_TRIANGLE);
+	JS_GLFW_CONSTANT(GAMEPAD_AXIS_LEFT_X);
+	JS_GLFW_CONSTANT(GAMEPAD_AXIS_LEFT_Y);
+	JS_GLFW_CONSTANT(GAMEPAD_AXIS_RIGHT_X);
+	JS_GLFW_CONSTANT(GAMEPAD_AXIS_RIGHT_Y);
+	JS_GLFW_CONSTANT(GAMEPAD_AXIS_LEFT_TRIGGER);
+	JS_GLFW_CONSTANT(GAMEPAD_AXIS_RIGHT_TRIGGER);
+	JS_GLFW_CONSTANT(GAMEPAD_AXIS_LAST);
 	
-	/*GLFW has not been initialized.*/
+	JS_GLFW_CONSTANT(NO_ERROR);
 	JS_GLFW_CONSTANT(NOT_INITIALIZED);
-	/*No context is current for this thread.*/
 	JS_GLFW_CONSTANT(NO_CURRENT_CONTEXT);
-	/*One of the enum parameters for the function was given an invalid enum.*/
 	JS_GLFW_CONSTANT(INVALID_ENUM);
-	/*One of the parameters for the function was given an invalid value.*/
 	JS_GLFW_CONSTANT(INVALID_VALUE);
-	/*A memory allocation failed.*/
 	JS_GLFW_CONSTANT(OUT_OF_MEMORY);
-	/*GLFW could not find support for the requested client API on the system.*/
 	JS_GLFW_CONSTANT(API_UNAVAILABLE);
-	/*The requested client API version is not available.*/
 	JS_GLFW_CONSTANT(VERSION_UNAVAILABLE);
-	/*A platform-specific error occurred that does not match any of the more specific categories.*/
 	JS_GLFW_CONSTANT(PLATFORM_ERROR);
-	/*The clipboard did not contain data in the requested format.*/
 	JS_GLFW_CONSTANT(FORMAT_UNAVAILABLE);
+	JS_GLFW_CONSTANT(NO_WINDOW_CONTEXT);
 	
 	JS_GLFW_CONSTANT(FOCUSED);
 	JS_GLFW_CONSTANT(ICONIFIED);
-	JS_GLFW_CONSTANT(AUTO_ICONIFY);
 	JS_GLFW_CONSTANT(RESIZABLE);
 	JS_GLFW_CONSTANT(VISIBLE);
 	JS_GLFW_CONSTANT(DECORATED);
+	JS_GLFW_CONSTANT(AUTO_ICONIFY);
+	JS_GLFW_CONSTANT(FLOATING);
+	JS_GLFW_CONSTANT(MAXIMIZED);
+	JS_GLFW_CONSTANT(CENTER_CURSOR);
+	JS_GLFW_CONSTANT(TRANSPARENT_FRAMEBUFFER);
 	
+	JS_GLFW_CONSTANT(HOVERED);
+	JS_GLFW_CONSTANT(FOCUS_ON_SHOW);
 	JS_GLFW_CONSTANT(RED_BITS);
 	JS_GLFW_CONSTANT(GREEN_BITS);
 	JS_GLFW_CONSTANT(BLUE_BITS);
@@ -321,8 +355,6 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GLFW_CONSTANT(SRGB_CAPABLE);
 	JS_GLFW_CONSTANT(REFRESH_RATE);
 	JS_GLFW_CONSTANT(DOUBLEBUFFER);
-	JS_GLFW_CONSTANT(TRUE);
-	JS_GLFW_CONSTANT(FALSE);
 	
 	JS_GLFW_CONSTANT(CLIENT_API);
 	JS_GLFW_CONSTANT(CONTEXT_VERSION_MAJOR);
@@ -332,32 +364,61 @@ Napi::Object initModule(Napi::Env env, Napi::Object exports) {
 	JS_GLFW_CONSTANT(OPENGL_FORWARD_COMPAT);
 	JS_GLFW_CONSTANT(OPENGL_DEBUG_CONTEXT);
 	JS_GLFW_CONSTANT(OPENGL_PROFILE);
+	JS_GLFW_CONSTANT(CONTEXT_RELEASE_BEHAVIOR);
+	JS_GLFW_CONSTANT(CONTEXT_NO_ERROR);
+	JS_GLFW_CONSTANT(CONTEXT_CREATION_API);
+	JS_GLFW_CONSTANT(SCALE_TO_MONITOR);
+	JS_GLFW_CONSTANT(COCOA_RETINA_FRAMEBUFFER);
+	JS_GLFW_CONSTANT(COCOA_FRAME_NAME);
+	JS_GLFW_CONSTANT(COCOA_GRAPHICS_SWITCHING);
+	JS_GLFW_CONSTANT(X11_CLASS_NAME);
+	JS_GLFW_CONSTANT(X11_INSTANCE_NAME);
 	
+	JS_GLFW_CONSTANT(NO_API);
 	JS_GLFW_CONSTANT(OPENGL_API);
 	JS_GLFW_CONSTANT(OPENGL_ES_API);
 	
 	JS_GLFW_CONSTANT(NO_ROBUSTNESS);
 	JS_GLFW_CONSTANT(NO_RESET_NOTIFICATION);
 	JS_GLFW_CONSTANT(LOSE_CONTEXT_ON_RESET);
-	
 	JS_GLFW_CONSTANT(OPENGL_ANY_PROFILE);
 	JS_GLFW_CONSTANT(OPENGL_CORE_PROFILE);
 	JS_GLFW_CONSTANT(OPENGL_COMPAT_PROFILE);
 	
 	JS_GLFW_CONSTANT(CURSOR);
+	
 	JS_GLFW_CONSTANT(STICKY_KEYS);
 	JS_GLFW_CONSTANT(STICKY_MOUSE_BUTTONS);
+	JS_GLFW_CONSTANT(LOCK_KEY_MODS);
+	
+	JS_GLFW_CONSTANT(RAW_MOUSE_MOTION);
 	
 	JS_GLFW_CONSTANT(CURSOR_NORMAL);
 	JS_GLFW_CONSTANT(CURSOR_HIDDEN);
 	JS_GLFW_CONSTANT(CURSOR_DISABLED);
+	JS_GLFW_CONSTANT(ANY_RELEASE_BEHAVIOR);
+	JS_GLFW_CONSTANT(RELEASE_BEHAVIOR_FLUSH);
+	JS_GLFW_CONSTANT(RELEASE_BEHAVIOR_NONE);
+	JS_GLFW_CONSTANT(NATIVE_CONTEXT_API);
+	JS_GLFW_CONSTANT(EGL_CONTEXT_API);
+	JS_GLFW_CONSTANT(OSMESA_CONTEXT_API);
+	JS_GLFW_CONSTANT(ARROW_CURSOR);
+	JS_GLFW_CONSTANT(IBEAM_CURSOR);
+	JS_GLFW_CONSTANT(CROSSHAIR_CURSOR);
+	JS_GLFW_CONSTANT(HAND_CURSOR);
+	JS_GLFW_CONSTANT(HRESIZE_CURSOR);
+	JS_GLFW_CONSTANT(VRESIZE_CURSOR);
 	
 	JS_GLFW_CONSTANT(CONNECTED);
 	JS_GLFW_CONSTANT(DISCONNECTED);
 	
-	// test scene
-	JS_GLFW_SET_METHOD(testScene);
-	JS_GLFW_SET_METHOD(testJoystick);
+	JS_GLFW_CONSTANT(JOYSTICK_HAT_BUTTONS);
+	
+	JS_GLFW_CONSTANT(COCOA_CHDIR_RESOURCES);
+	JS_GLFW_CONSTANT(COCOA_MENUBAR);
+	
+	JS_GLFW_CONSTANT(DONT_CARE);
+	
 	
 	return exports;
 	
